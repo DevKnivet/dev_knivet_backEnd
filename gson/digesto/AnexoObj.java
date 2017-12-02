@@ -1,4 +1,4 @@
-package gson;
+package digesto;
 
 import java.util.ArrayList;
 

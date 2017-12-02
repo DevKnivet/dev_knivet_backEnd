@@ -1,4 +1,4 @@
-package gson;
+package digesto;
 
 public class Advogado {
 

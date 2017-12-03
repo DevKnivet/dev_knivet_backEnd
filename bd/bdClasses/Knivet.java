@@ -1,4 +1,4 @@
-package bd;
+package bdClasses;
 
 public class Knivet {
 

@@ -6,9 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import bdClasses.Knivet;
 import bdConnectionKnivetUmbler.BDConnection;
 
-public class KnivetDAO {
+public class GetKnivetInfos_DAO {
 
 	 public ArrayList<Knivet> buscar() throws Exception {
 		 	//Cria a conexão com o BD (configurado em BDConnection)

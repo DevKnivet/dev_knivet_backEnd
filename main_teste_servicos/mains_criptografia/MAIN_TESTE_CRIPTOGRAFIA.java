@@ -1,21 +1,20 @@
 package mains_criptografia;
 
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
-import rsa.Criptografia;
-import rsa.CriptografiaGerarChaves;
-import rsa.Key;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 
-public class MAIN_TESTE_CRIPTOGRAFIA {
-	public static void main (String [] args) throws NoSuchAlgorithmException
+import rsa.RSAString;
+
+public class MAIN_TESTE_Criptografia {
+	public static void main (String args[]) throws Exception
 	{
-		CriptografiaGerarChaves gerarKey = new CriptografiaGerarChaves();
-		ArrayList<Key> chaves = gerarKey.gerarChave();
-		Criptografia cripto = new Criptografia();		
-		byte[] txtEncript = cripto.criptografar("", chaves.get(0).getChavePublica());
-		String txtDescrpt = cripto.descriptografar(txtEncript, chaves.get(0).getChavePrivada());		
-		System.out.println("Chave Privada: "+chaves.get(0).getChavePrivada().toString()+" - Chave Pública: "+chaves.get(0).getChavePublica().toString()+" ---- Texto Criptografado: "+txtEncript+" - Texto Descriptografado: "+txtDescrpt);
-		
+		RSAString rsa = new RSAString();
+		KeyPair keys = rsa.LoadKeyPair("C:\\chaves");
+		Cipher cipher = rsa.gerarCipher();
+		rsa.inicializarRSA(keys, cipher);		
+		System.out.println(rsa.decrypt(rsa.encrypt("teste")));
 	}
 }

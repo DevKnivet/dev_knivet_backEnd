@@ -29,8 +29,11 @@ public class Set {
 	 PreparedStatement stmt = conn.prepareStatement(sql);
 	 String maiorPK_S = String.valueOf(id+1);
 	 stmt.setString(1, maiorPK_S);
-	 stmt.setInt(2, movimentacao.getNum_processo());
+	 stmt.setString(2, movimentacao.getNum_processo());
 	 stmt.execute();  
 	 stmt.close();		
+	}
+	public static void main (String [] args)
+	{
 	}
 }

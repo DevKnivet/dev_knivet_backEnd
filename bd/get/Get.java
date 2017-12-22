@@ -52,7 +52,7 @@ public class Get {
 		while (resultado.next()) {        	
             Escavador_id_movimentacoes linha = new Escavador_id_movimentacoes();
             linha.setId_usr(resultado.getInt("id_usuario"));
-            linha.setNum_processo(resultado.getInt("num_processo"));
+            linha.setNum_processo(resultado.getString("num_processo"));
             lista.add(linha);
 		}
 		resultado.close();        

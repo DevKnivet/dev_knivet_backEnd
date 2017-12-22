@@ -6,6 +6,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/outputsJava"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/tratamentoJSON"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/classesInputs"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/bd"/>
         <property name="java-output-path" value="/KnivetSistemaServidor/build/classes"/>
         <property name="context-root" value="knivet"/>
     </wb-module>

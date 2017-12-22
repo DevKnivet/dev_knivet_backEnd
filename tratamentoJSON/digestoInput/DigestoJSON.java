@@ -18,6 +18,7 @@ import digestoData4.Advogado;
 import digestoData4.Data4;
 import digestoData4.DataDigesto4;
 import digestoData4.Parte;
+import escavadorProcesso.EscavadorJSON;
 
 public class DigestoJSON {
 	public Digesto tratarJSON(String input)
@@ -67,6 +68,6 @@ public class DigestoJSON {
 		DigestoJSON json = new DigestoJSON();
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(new FileReader("/Users/Dezembro/Desktop/JSON4.txt"));
-		Digesto digesto = json.tratarJSON(obj.toString());
+		Digesto digesto = json.tratarJSON(obj.toString());		
 	}
 }

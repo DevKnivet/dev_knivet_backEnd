@@ -59,10 +59,6 @@ public class TrelloPostCard {
 		     } finally {
 		         instream.close();
 		     }
-		 }
-		
-		
-		
+		 }	
 	}
-	
 }

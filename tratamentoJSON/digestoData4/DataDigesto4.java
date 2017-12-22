@@ -37,6 +37,7 @@ public class DataDigesto4 {
 				anexos.add(anexosClasse);				
 			}
 			dataClasse.setAnexos(anexos);
+			anexos = new ArrayList<Anexos>();
 			dataClasse.setVara(dataObj.optInt("vara"));
 			dataClasse.setClasseNatureza(dataObj.optString("classeNatureza"));
 			JSONArray movsArray = dataObj.getJSONArray("movs");
@@ -55,6 +56,7 @@ public class DataDigesto4 {
 				movs.add(movsClasse);		
 			}			
 			dataClasse.setMovs(movs);
+			movs = new ArrayList<Movs>();
 			dataClasse.setDistribuicaoTipo(dataObj.optString("distribuicaoTipo"));
 			dataClasse.setSituacao(dataObj.optString("situacao"));
 			dataClasse.setJuiz(dataObj.optString("juiz"));
@@ -115,6 +117,7 @@ public class DataDigesto4 {
 					advogados.add(advogadoClasse);
 				}
 				partesClasse.setAdvogados(advogados);
+				advogados = new ArrayList<Advogado>();
 				partesClasse.setParteAut(partesObj.optBoolean(10));
 				partesClasse.setParteCo(partesObj.optBoolean(11));
 				partesClasse.setParteRe(partesObj.optBoolean(12));
@@ -124,8 +127,9 @@ public class DataDigesto4 {
 				partesClasse.setParteFisica(partesObj.optBoolean(16));
 				partes.add(partesClasse);		
 			}
-			dataClasse.setPartes(partes);		
-			data.add(dataClasse);			
+			dataClasse.setPartes(partes);
+			partes = new ArrayList<Parte>();
+			data.add(dataClasse);
 		}
 		return data;		
 	}

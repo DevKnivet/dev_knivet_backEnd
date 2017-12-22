@@ -12,6 +12,7 @@ public class Digesto {
 	String source_user_custom;
 	String api_name;
 	Object data;
+	
 	public int getId() {
 		return id;
 	}

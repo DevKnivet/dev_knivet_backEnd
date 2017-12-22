@@ -22,13 +22,12 @@ public class Set {
 	 stmt.execute();  
 	 stmt.close();		
 	}
-	public void setEscavador_id_movimentacoes(Escavador_id_movimentacoes movimentacao ,int id) throws Exception
+	public void setEscavador_id_movimentacoes(Escavador_id_movimentacoes movimentacao) throws Exception
 	{		  
 	 String sql = "INSERT INTO escavador_movimentacoes_id(id_usuario,num_processo) VALUES(?,?)";    
 	 Connection conn = BDConnection.abrir();
 	 PreparedStatement stmt = conn.prepareStatement(sql);
-	 String maiorPK_S = String.valueOf(id+1);
-	 stmt.setString(1, maiorPK_S);
+	 stmt.setInt(1, movimentacao.getId_usr());
 	 stmt.setString(2, movimentacao.getNum_processo());
 	 stmt.execute();  
 	 stmt.close();		

@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import get.Get;
+import set.Set;
 import tabelas.Escavador_id_movimentacoes;
 
 
@@ -42,6 +43,7 @@ public class MovimentacaoProcesso {
 				 String string_JSON = EntityUtils.toString(response.getEntity());
 				 JSONObject jo = new JSONObject (string_JSON);
 				 int idMovimentacao = (int) jo.get("id");
+				 Set set = new Set();
 				 
 				
 				 if(verificandoIdMovimentacao(idMovimentacao)){
@@ -49,6 +51,10 @@ public class MovimentacaoProcesso {
 				 }else if(!(verificandoIdMovimentacao(idMovimentacao))){
 					 // insere no banco de dados
 					 // Vai ter erro de conexão com o usuário
+					 Escavador_id_movimentacoes aux = new Escavador_id_movimentacoes();
+				//	 aux.setId_usr(id_usr);
+					 aux.setNum_processo(""+idMovimentacao);
+					 set.setEscavador_id_movimentacoes(aux);
 				 }
 				 
 				 System.out.println(string_JSON);
@@ -78,6 +84,7 @@ public class MovimentacaoProcesso {
 	}			 
 	
 	public boolean verificandoIdMovimentacao(int id ) throws Exception{
+
 		String idString = ""+id;
 		boolean aux = false;
 		 Get get = new Get();				 
@@ -97,4 +104,7 @@ public class MovimentacaoProcesso {
 		 }
 		return aux;
 	}
+	
+	
+
 }

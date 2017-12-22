@@ -1,3 +1,5 @@
+package escavadorProcesso;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ import tabelas.Escavador_id_movimentacoes;
 public class MovimentacaoProcesso {
 	
 	
-	public String getMovimentacao(String token, int id) throws IOException, JSONException{
+	public String getMovimentacao(String token, int id) throws Exception{
 		   String link = "https://www.escavador.com/api/v1/movimentacoes/"+id;
 		// String link = "https://www.escavador.com/api/v1/movimentacoes/"+286417944;
 				 HttpClient client = HttpClients.custom().build();
@@ -40,14 +42,21 @@ public class MovimentacaoProcesso {
 				 String string_JSON = EntityUtils.toString(response.getEntity());
 				 JSONObject jo = new JSONObject (string_JSON);
 				 int idMovimentacao = (int) jo.get("id");
-				// verificarBD(idMovimentacao);
+				 
+				
+				 if(verificandoIdMovimentacao(idMovimentacao)){
+					 // não insere no banco de dados
+				 }else if(!(verificandoIdMovimentacao(idMovimentacao))){
+					 // insere no banco de dados
+					 // Vai ter erro de conexão com o usuário
+				 }
+				 
 				 System.out.println(string_JSON);
 				 
-				 ArrayList idMovimentacoes = new ArrayList();
+				// ArrayList idMovimentacoes = new ArrayList();
 				 
-				 Escavador_id_movimentacoes movimentacoes = new Escavador_id_movimentacoes();
-				 Get get = new get();				 
-				 arrayListObjetoIdMovimentacoes =  get.buscarEscavador_Id_Movimentacoes();
+				// Escavador_id_movimentacoes movimentacoes = new Escavador_id_movimentacoes();
+				 
 				 
 				 
 				 
@@ -68,20 +77,24 @@ public class MovimentacaoProcesso {
 				 
 	}			 
 	
-	private boolean verificandoIdMovimentacao(int id, ArrayList idMovimentacoes ){
+	public boolean verificandoIdMovimentacao(int id ) throws Exception{
+		String idString = ""+id;
+		boolean aux = false;
+		 Get get = new Get();				 
+		 ArrayList <Escavador_id_movimentacoes>arrayListObjetoIdMovimentacoes =  get.buscarEscavador_Id_Movimentacoes();
+		
+		
 		 for(int i=0;i<arrayListObjetoIdMovimentacoes.size();i++)
 		 {
-			 arrayListObjetoIdMovimentacoes.get(i).getId;
-			 arrayListObjetoIdMovimentacoes.get(i).getIdProcesso;
+			 Escavador_id_movimentacoes escavadorMovimentacoes = (Escavador_id_movimentacoes) arrayListObjetoIdMovimentacoes.get(i);
+			 // ele não trata o erro de um ID de movimentação, estiver em mais de um usuário , mais para frente se preocupar com isso
 			 
+			 if (escavadorMovimentacoes.getNum_processo().equals(idString)){
+				 aux =  true;
+			 }else{
+				 aux = false;
+			 }			 
 		 }
-		 
-	
-		return true;
-		
+		return aux;
 	}
-				
-
-	
-	
 }

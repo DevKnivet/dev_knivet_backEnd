@@ -1,3 +1,5 @@
+package escavadorProcesso;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ import org.json.JSONObject;
 
 public class MonitoramentoDiario {
 	
-public String monitoramentoDiario(String token) throws IOException{
+public String monitoramentoDiario(String token) throws Exception{
 	
 		ArrayList listId = new ArrayList();
 		

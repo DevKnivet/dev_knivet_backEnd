@@ -1,3 +1,5 @@
+package escavadorProcesso;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class AparicoesProcesso {
 	
 		private static String erro = "erro";
 		
-	public String getAparicoesMonitoramento(String token, int id ) throws IOException{
+	public String getAparicoesMonitoramento(String token, int id ) throws Exception{
 		// String link = "https://www.escavador.com/api/v1/monitoramentos/"+90175+"/aparicoes";
 		ArrayList listId = new ArrayList();
 		try{

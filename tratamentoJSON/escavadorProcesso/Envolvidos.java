@@ -11,6 +11,7 @@ public class Envolvidos {
 	private String link_api;
 	private String nome_sem_filtro;
 	private String envolvido_tipo;
+	
 	public int getId() {
 		return id;
 	}

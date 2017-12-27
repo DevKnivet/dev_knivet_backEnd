@@ -46,7 +46,7 @@ public String getToken(String email, String senha) throws IOException{
 			
 		//Transforma o resultado em uma string e printa.
 		String aux = EntityUtils.toString(response.getEntity());
-		
+		//System.out.println(aux);
 		// Trata a String, devolvendo somente o token de acesso
 		
 		try{

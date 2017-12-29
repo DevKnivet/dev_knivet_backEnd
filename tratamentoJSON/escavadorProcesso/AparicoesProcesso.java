@@ -35,7 +35,10 @@ public class AparicoesProcesso {
 		 // executa o HTTP
 		 HttpResponse response =  client.execute(request);
 		 String aux = EntityUtils.toString(response.getEntity());
-		 System.out.println(aux);
+
+		 
+		 
+		// System.out.println(aux);
 		 JSONObject jo = new JSONObject (aux);
 		 JSONArray x =  (JSONArray) jo.get("items");
 		 
@@ -86,4 +89,6 @@ public class AparicoesProcesso {
 	}
 	
 	*/
+	
+	
 }

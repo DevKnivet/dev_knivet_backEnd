@@ -61,4 +61,38 @@ public class TrelloPostCard {
 		     }
 		 }	
 	}
+	
+	public static void PostCard(String nomeB,String desc,String idList, String key, String token) throws ClientProtocolException, IOException
+	{
+		//Inicia cliente HTTP
+		HttpClient httpclient = HttpClients.createDefault();
+		//Link base da trello boards
+		HttpPost httppost = new HttpPost("https://api.trello.com/1/cards");
+		//Cria variavel List para adicionar os parametros
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
+		//BasicNameValuePair(tipo do parametro {ver site trello devellopers}), valor que será passado)
+		parametros.add(new BasicNameValuePair("name", nomeB));
+		parametros.add(new BasicNameValuePair("desc", desc));
+		
+		parametros.add(new BasicNameValuePair("idList", idList));
+		parametros.add(new BasicNameValuePair("key", key));
+		parametros.add(new BasicNameValuePair("token", token));
+		//Encode todos os parametros na entidade do site http
+		httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+		//Envia o http montado para a internet
+		HttpResponse response = httpclient.execute(httppost);
+		//Pega resposta do http (ainda não implementado)
+		
+		//Tratamento da resposta (ainda nao implementado)
+		HttpEntity entity = response.getEntity();
+		 if (entity != null) {
+		     InputStream instream = entity.getContent();
+		     try {
+		    	 
+		     } finally {
+		         instream.close();
+		     }
+		 }	
+	}
+	
 }

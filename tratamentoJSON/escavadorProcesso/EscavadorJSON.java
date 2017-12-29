@@ -25,6 +25,10 @@ public class EscavadorJSON {
 		processo.setDescricao_pequena(json.optString("descricao_pequena"));
 		processo.setDiario_oficial(json.optString("diario_oficial"));
 		processo.setEstado(json.optString("estado"));
+		processo.setTipo(json.optString("tipo"));
+		processo.setSecao(json.optString("secao"));
+		processo.setConteudo(json.optString("conteudo"));
+		processo.setTexto_categoria(json.opt("texto_categoria").toString());
 		JSONArray envolvidosArray = json.getJSONArray("envolvidos");
 		for(int i=0;i<envolvidosArray.length();i++)
 		{
@@ -67,7 +71,18 @@ public class EscavadorJSON {
 	{
 		EscavadorJSON json = new EscavadorJSON();
 		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(new FileReader("/Users/user/Desktop/stringJSON.txt"));
-		Processo processo = json.tratarJSON(obj.toString());
+	//	Object obj = parser.parse(new FileReader("/Users/user/Desktop/stringJSON.txt"));
+		
+		MonitoramentoDiario diario = new MonitoramentoDiario();
+		try {
+		//	diario.monitoramentoDiario(new ReceberToken().getToken("morg.guilherme@gmail.com", "AnnaBeth10"));
+			// sem crédito na API
+			diario.monitoramentoDiario(new ReceberToken().getToken("morgado@knivet.com.br", "AnnaBeth10"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("erro");
+		}
+	//	Processo processo = json.tratarJSON(obj.toString());
 	}
 }

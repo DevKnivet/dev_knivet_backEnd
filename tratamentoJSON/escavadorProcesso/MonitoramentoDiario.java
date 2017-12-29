@@ -66,9 +66,9 @@ public String monitoramentoDiario(String token) throws Exception{
 			 String categoria = (String)jAux.get("categoria");
 			 
 			 
-			 if ("ADVOGADO".equals(categoria)){
+			 if (("PESSOA".equals(categoria)) || ("ADVOGADO".equals(categoria)) ){
 				 int id = (int) jAux.get("id");
-					// System.out.println(id);
+				//	 System.out.println(id);
 				 //getAparicoesMonitoramento(token,id);
 				 	AparicoesProcesso aparicoes = new AparicoesProcesso();
 				 	aparicoes.getAparicoesMonitoramento(token, id);

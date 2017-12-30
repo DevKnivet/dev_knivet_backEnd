@@ -3,14 +3,16 @@ package get;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import conexao.BDConnection;
 import tabelas.Escavador_id_movimentacoes;
+import tabelas.Escavador_usuario;
 import tabelas.Usuario;
 
 public class Get {
-	public ArrayList<Usuario> buscarUsuario() throws Exception 
+	public ArrayList<Usuario> Usuario() throws Exception 
 	{
 		//Cria a conexão com o BD (configurado em BDConnection)
         Connection conn = BDConnection.abrir();
@@ -43,7 +45,7 @@ public class Get {
         //Retornar lista de objetos Knivet com os dados
         return lista;
 	}	
-	public ArrayList<Escavador_id_movimentacoes> buscarEscavador_Id_Movimentacoes() throws Exception
+	public ArrayList<Escavador_id_movimentacoes> Escavador_Id_Movimentacoes() throws Exception
 	{
 		Connection conn = BDConnection.abrir();
 		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, num_processo FROM escavador_movimentacoes_id ORDER BY id_usuario");
@@ -59,5 +61,22 @@ public class Get {
         comando.close();        
         conn.close();        
         return lista;	
+	}
+	public ArrayList<Escavador_usuario> Escavador_token() throws Exception
+	{
+		Connection conn = BDConnection.abrir();
+		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, token FROM escavador_usuario ORDER BY id_usuario");
+		ResultSet resultado = comando.executeQuery();
+		ArrayList<Escavador_usuario> lista = new ArrayList<Escavador_usuario>();
+		while (resultado.next()) {        	
+			Escavador_usuario linha = new Escavador_usuario();
+            linha.setId_usuario(resultado.getInt("id_usuario"));
+            linha.setToken(resultado.getString("token"));
+            lista.add(linha);
+		}
+		resultado.close();        
+        comando.close();        
+        conn.close();        
+        return lista;
 	}
 }

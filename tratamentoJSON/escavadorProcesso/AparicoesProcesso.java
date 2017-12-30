@@ -17,9 +17,10 @@ public class AparicoesProcesso {
 	
 		private static String erro = "erro";
 		
-	public String getAparicoesMonitoramento(String token, int id ) throws Exception{
+	public ArrayList<String> getAparicoesMonitoramento(String token, int id ) throws Exception{
 		// String link = "https://www.escavador.com/api/v1/monitoramentos/"+90175+"/aparicoes";
 		ArrayList listId = new ArrayList();
+		ArrayList<String>postCard = new ArrayList<String>();
 		try{
 		String link = "https://www.escavador.com/api/v1/monitoramentos/"+id+"/aparicoes";
 		 HttpClient client = HttpClients.custom().build();
@@ -60,22 +61,22 @@ public class AparicoesProcesso {
 			 
 		//	 System.out.println(objeto_id);
 			MovimentacaoProcesso movimentacao = new MovimentacaoProcesso();
-			movimentacao.getMovimentacao(token, objeto_id);
+			postCard = movimentacao.getMovimentacao(token, objeto_id);
 		
 			 
 		}
 		
 		}catch(IndexOutOfBoundsException z){
 			
-			 return erro;
+			 z.getStackTrace();
 		} catch (IOException e) {
 			 
-			 return erro;
+			 e.getStackTrace();
 		} catch (JSONException e) {
 			 
-			 return erro;
+			 e.getStackTrace();
 		}
-		return "sucesso";
+		return postCard;
 	}
 	/*
 	public void setArrayList (String token, ArrayList id) throws IOException{

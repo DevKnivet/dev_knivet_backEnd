@@ -25,6 +25,7 @@ import tabelas.Escavador_id_movimentacoes;
 // id = id é uma
 public class MovimentacaoProcesso {
 	
+	private CardTrelloEscavador titulo = new CardTrelloEscavador("");
 	
 	public ArrayList<String> getMovimentacao(String token, int id) throws Exception{
 		   String link = "https://www.escavador.com/api/v1/movimentacoes/"+id;
@@ -68,9 +69,7 @@ public class MovimentacaoProcesso {
 				 	ArrayList<String>postCard = new ArrayList<String>();
 					postCard.add(tituloCardTrello(string_JSON));	
 					postCard.add(descricaoCardTrello(string_JSON));
-					
-				 
-				 
+				 				 
 				
 			
 	
@@ -124,6 +123,7 @@ public class MovimentacaoProcesso {
 		 
 		 
 		 System.out.println(x + "\n");
+		 titulo.setDescricao(x);
 		 return x;
 		 // informações
 		 /*
@@ -141,7 +141,7 @@ public class MovimentacaoProcesso {
 		
 		 
 		 ArrayList<Envolvidos> envolvidos = processo.getEnvolvido();
-		 CardTrelloEscavador titulo = new CardTrelloEscavador("");
+//		 CardTrelloEscavador titulo = new CardTrelloEscavador("");
 		
 			 
 		
@@ -228,7 +228,7 @@ public class MovimentacaoProcesso {
 		 String idString = ""+id;
 		 boolean aux = false;
 		 Get get = new Get();				 
-		 ArrayList <Escavador_id_movimentacoes>arrayListObjetoIdMovimentacoes =  get.buscarEscavador_Id_Movimentacoes();
+		 ArrayList <Escavador_id_movimentacoes>arrayListObjetoIdMovimentacoes =  get.Escavador_Id_Movimentacoes();
 		
 		
 		 for(int i=0;i<arrayListObjetoIdMovimentacoes.size();i++)

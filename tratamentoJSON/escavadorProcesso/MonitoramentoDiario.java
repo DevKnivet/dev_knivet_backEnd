@@ -19,10 +19,10 @@ import org.json.JSONObject;
 
 public class MonitoramentoDiario {
 	
-public String monitoramentoDiario(String token) throws Exception{
+public ArrayList<String> monitoramentoDiario(String token) throws Exception{
 	
 		ArrayList listId = new ArrayList();
-		
+		ArrayList<String>postCard = new ArrayList<String>();
 		try{
 			
 			
@@ -71,29 +71,26 @@ public String monitoramentoDiario(String token) throws Exception{
 				//	 System.out.println(id);
 				 //getAparicoesMonitoramento(token,id);
 				 	AparicoesProcesso aparicoes = new AparicoesProcesso();
-				 	aparicoes.getAparicoesMonitoramento(token, id);
+				 	postCard = aparicoes.getAparicoesMonitoramento(token, id);
 				 //	listId.add(id);
 				 	
 				 	
 				 
-			 }
-			 
-			
-			 
+			 } 
 		}
 		 
 		 
 		}catch(IndexOutOfBoundsException z){
 			
-			 return "erro";
+			 z.getStackTrace();
 		} catch (IOException e) {
 			
-			 return "erro";
+			 e.getStackTrace();
 		} catch (JSONException e) {
 			 
-			 return "erro";
+			 e.getStackTrace();
 		}
-		return "sucesso";
+		return postCard;
 		
 	}
 }

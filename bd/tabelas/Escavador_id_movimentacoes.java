@@ -3,7 +3,15 @@ package tabelas;
 public class Escavador_id_movimentacoes {
 	private int id_usr;
 	private String num_processo;
+	private int num_movimentacao;
 	
+	
+	public int getNum_movimentacao() {
+		return num_movimentacao;
+	}
+	public void setNum_movimentacao(int num_movimentacao) {
+		this.num_movimentacao = num_movimentacao;
+	}
 	public int getId_usr() {
 		return id_usr;
 	}

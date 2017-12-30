@@ -9,8 +9,22 @@ public class CardTrelloEscavador {
 	private String parteUm, parteDois ;
 	private String parteZero;
 	private String descricao;
+	private String processo;
+	private int idMovimentacao;
 	
 	
+	public String getProcesso() {
+		return processo;
+	}
+	public void setProcesso(String processo) {
+		this.processo = processo;
+	}
+	public int getIdMovimentacao() {
+		return idMovimentacao;
+	}
+	public void setIdMovimentacao(int idMovimentacao) {
+		this.idMovimentacao = idMovimentacao;
+	}
 	public String getDescricao() {
 		return descricao;
 	}

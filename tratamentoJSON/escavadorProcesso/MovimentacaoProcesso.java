@@ -27,7 +27,7 @@ public class MovimentacaoProcesso {
 	
 	private CardTrelloEscavador titulo = new CardTrelloEscavador("");
 	
-	public ArrayList<String> getMovimentacao(String token, int id) throws Exception{
+	public CardTrelloEscavador getMovimentacao(String token, int id) throws Exception{
 		   String link = "https://www.escavador.com/api/v1/movimentacoes/"+id;
 		// String link = "https://www.escavador.com/api/v1/movimentacoes/"+286417944;
 				 HttpClient client = HttpClients.custom().build();
@@ -45,7 +45,8 @@ public class MovimentacaoProcesso {
 				 String string_JSON = EntityUtils.toString(response.getEntity());
 				 JSONObject jo = new JSONObject (string_JSON);
 				 int idMovimentacao = (int) jo.get("id");
-				 
+ 				 String processo = (String)jo.get("descricao_pequena");
+ 				 processo = processo.replace("Movimentação do processo","").trim();
 				 /*
 				 Set set = new Set();
 				 
@@ -66,23 +67,18 @@ public class MovimentacaoProcesso {
 				// ArrayList idMovimentacoes = new ArrayList();
 				 
 				// Escavador_id_movimentacoes movimentacoes = new Escavador_id_movimentacoes();
-				 	ArrayList<String>postCard = new ArrayList<String>();
-					postCard.add(tituloCardTrello(string_JSON));	
-					postCard.add(descricaoCardTrello(string_JSON));
-				 				 
-				
-			
-	
-				 
-				 // ele só vai retornar o JSON da movimentação SE não tiver retornado antes, ou seja, se não estiver do BD
-				 // como vamos estruturar o BD?
-				 // criar uma tabela com as colunas,
-			
-				 // usuário, processo, idMovimentação, onde o usuário vai ser PK E FK 
 				 
 				 
-				 
-				 return postCard;
+				 	ArrayList<CardTrelloEscavador>postCard = new ArrayList<CardTrelloEscavador>();
+				 	
+				 	CardTrelloEscavador aux = new CardTrelloEscavador("");
+				 	aux.setTitulo(tituloCardTrello(string_JSON));
+				 	aux.setDescricao(descricaoCardTrello(string_JSON));
+				 	aux.setIdMovimentacao(idMovimentacao);
+				 	aux.setProcesso(processo);
+				 	
+				 	
+				 	return aux;
 				 
 				 
 	}			

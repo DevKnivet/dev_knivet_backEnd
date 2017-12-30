@@ -17,9 +17,9 @@ public class ChamarEscavador {
 			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token(); //id - token
 			for(int i=0;i<tabelaEscavador_usuario.size();i++)
 			{
-				Escavador_usuario local = tabelaEscavador_usuario.get(i);
-				ArrayList<String>postCard = diario.monitoramentoDiario(local.getToken());
-				System.out.println(postCard.get(i));
+				//Escavador_usuario local = tabelaEscavador_usuario.get(i);
+			//	ArrayList<String>postCard = diario.monitoramentoDiario(local.getToken());
+				//System.out.println(postCard.get(i));
 			}
 		} catch (Exception e) 
 		{

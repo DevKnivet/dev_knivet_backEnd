@@ -53,13 +53,15 @@ public class Get {
 	public ArrayList<Escavador_usuario> Escavador_token() throws Exception
 	{
 		Connection conn = BDConnection.abrir();
-		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, token FROM escavador_usuario ORDER BY id_usuario");
+		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, token, email, senha FROM escavador_usuario ORDER BY id_usuario");
 		ResultSet resultado = comando.executeQuery();
 		ArrayList<Escavador_usuario> lista = new ArrayList<Escavador_usuario>();
 		while (resultado.next()) {        	
 			Escavador_usuario linha = new Escavador_usuario();
             linha.setId_usuario(resultado.getInt("id_usuario"));
             linha.setToken(resultado.getString("token"));
+            linha.setEmail(resultado.getString("email"));
+            linha.setSenha(resultado.getString("senha"));
             lista.add(linha);
 		}
 		resultado.close();        

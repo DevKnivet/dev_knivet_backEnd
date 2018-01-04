@@ -8,7 +8,7 @@ import tabelas.Escavador_id_movimentacoes;
 import tabelas.Usuario;
 
 public class Set {
-	public void setUsuario(Usuario user,int id) throws Exception
+	public void Usuario(Usuario user,int id) throws Exception
 	{		  
 	 String sql = "INSERT INTO usuario(id,email,senha,usuario,emailRec) VALUES(?,?,?,?,?)";    
 	 Connection conn = BDConnection.abrir();
@@ -22,7 +22,7 @@ public class Set {
 	 stmt.execute();  
 	 stmt.close();		
 	}
-	public void setEscavador_id_movimentacoes(Escavador_id_movimentacoes movimentacao) throws Exception
+	public void Escavador_id_movimentacoes(Escavador_id_movimentacoes movimentacao) throws Exception
 	{		  
 	 String sql = "INSERT INTO escavador_movimentacoes_id(id_usuario,num_processo,num_movimentacao) VALUES(?,?,?)";    
 	 Connection conn = BDConnection.abrir();
@@ -33,6 +33,17 @@ public class Set {
 	 stmt.execute();  
 	 stmt.close();		
 	}
+//	public void Escavador_usuario(Escavador_usuario movimentacao) throws Exception
+//	{		  
+//	 String sql = "INSERT INTO escavador_usuario(id_usuario,token,email,senha) VALUES(?,?,?,?)";    
+//	 Connection conn = BDConnection.abrir();
+//	 PreparedStatement stmt = conn.prepareStatement(sql);
+//	 stmt.setInt(1, movimentacao.getId_usr());
+//	 stmt.setString(2, movimentacao.getNum_processo());
+//	 stmt.setInt(3, movimentacao.getNum_movimentacao());
+//	 stmt.execute();  
+//	 stmt.close();		
+//	}
 	public static void main (String [] args)
 	{
 	}

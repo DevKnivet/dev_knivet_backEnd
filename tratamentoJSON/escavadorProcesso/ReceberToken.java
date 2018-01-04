@@ -63,6 +63,5 @@ public String getToken(String email, String senha) throws IOException{
 		}
 		
 }
-	
 
 }

@@ -13,14 +13,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// Essa classe contém o método getAparicoesMonitoramento, onde no método getAparicoes, retorna um ArrayList
+// com os IDs das movimentações
+
 public class AparicoesProcesso {
 	
 		private static String erro = "erro";
 		
-	public ArrayList<String> getAparicoesMonitoramento(String token, int id ) throws Exception{
+	public ArrayList<Integer> getAparicoesMonitoramento(String token, int id ) throws Exception{
 		// String link = "https://www.escavador.com/api/v1/monitoramentos/"+90175+"/aparicoes";
-		ArrayList listId = new ArrayList();
-		ArrayList<String>postCard = new ArrayList<String>();
+
+		ArrayList<Integer>postCard = new ArrayList<Integer>();
 		try{
 		String link = "https://www.escavador.com/api/v1/monitoramentos/"+id+"/aparicoes";
 		 HttpClient client = HttpClients.custom().build();
@@ -60,8 +63,8 @@ public class AparicoesProcesso {
 			 int objeto_id = (int) jAux.get("objeto_id");
 			 
 		//	 System.out.println(objeto_id);
-			MovimentacaoProcesso movimentacao = new MovimentacaoProcesso();
-			postCard = movimentacao.getMovimentacao(token, objeto_id);
+		//	MovimentacaoProcesso movimentacao = new MovimentacaoProcesso();
+			postCard.add(objeto_id);
 		
 			 
 		}

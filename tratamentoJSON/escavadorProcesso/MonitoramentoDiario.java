@@ -15,14 +15,13 @@ import org.json.JSONObject;
 
 
 // Essa classe recebe o TOKEN do usuário como argumento
-// E devolve uma list de IDs com os monitoramentos cadastrados pelo usuário
+// E devolve um Arraylist de IDs dos monitoramentos cadastrados pelo usuário
 
 public class MonitoramentoDiario {
 	
-public ArrayList<String> monitoramentoDiario(String token) throws Exception{
+public ArrayList<Integer> monitoramentoDiario(String token) throws Exception{
 	
-		ArrayList listId = new ArrayList();
-		ArrayList<String>postCard = new ArrayList<String>();
+		ArrayList<Integer>postCard = new ArrayList<Integer>();
 		try{
 			
 			
@@ -69,10 +68,10 @@ public ArrayList<String> monitoramentoDiario(String token) throws Exception{
 			 if (("PESSOA".equals(categoria)) || ("ADVOGADO".equals(categoria)) ){
 				 int id = (int) jAux.get("id");
 				//	 System.out.println(id);
-				 //getAparicoesMonitoramento(token,id);
-				 	AparicoesProcesso aparicoes = new AparicoesProcesso();
-				 	postCard = aparicoes.getAparicoesMonitoramento(token, id);
-				 //	listId.add(id);
+				 	//getAparicoesMonitoramento(token,id);
+				 //	AparicoesProcesso aparicoes = new AparicoesProcesso();
+				 	//postCard = aparicoes.getAparicoesMonitoramento(token, id);
+				 	postCard.add(id);
 				 	
 				 	
 				 

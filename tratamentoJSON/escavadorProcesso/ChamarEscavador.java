@@ -4,30 +4,197 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import get.Get;
+import set.Set;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 
 public class ChamarEscavador {
 	Get get = new Get();
-	public void receberAtualizacoes()
+	Set set = new Set();
+	ArrayList<CardSaida> cardTotal = new ArrayList<CardSaida>();
+	public ArrayList<CardSaida> receberAtualizacoes()
 	{
-		MonitoramentoDiario diario = new MonitoramentoDiario();
+		MonitoramentoDiario diario = new MonitoramentoDiario();		
 		try 
 		{	
 			
-			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token(); //id - token
+			ArrayList<Escavador_usuario> tabelaEscavador_usuario =get.Escavador_token(); //id - token
 			ArrayList<Escavador_id_movimentacoes> movimentacoes = get.Escavador_Id_Movimentacoes();
+			ArrayList<Integer> idDiario = new ArrayList<Integer>();
+			ArrayList<Integer> idDiarioDiferente = new ArrayList<Integer>();
+			AparicoesProcesso aparicoes = new AparicoesProcesso();
+			MovimentacaoProcesso processo = new MovimentacaoProcesso();
+//			ArrayList<CardTrelloEscavador> card = new ArrayList<CardTrelloEscavador>();
+			Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();			
+			System.out.println("Usuários cadastrados -> "+tabelaEscavador_usuario.size());
+			System.out.println("------------------------------------------------------------------------------------------------------------");
 			for(int i=0;i<tabelaEscavador_usuario.size();i++)
-			{
+			{				
+				ArrayList<CardTrelloEscavador> card = new ArrayList<CardTrelloEscavador>();
 				Escavador_usuario local = tabelaEscavador_usuario.get(i);
-				ArrayList<String>postCard = diario.monitoramentoDiario(local.getToken());
+				ReceberToken token = new ReceberToken();
+				local.setToken(token.getToken(local.getEmail(),local.getSenha()));
+				idDiario = (diario.monitoramentoDiario(local.getToken()));
 				
+				System.out.println(i+" -> Email cadastrado -> "+local.getEmail());
+				System.out.println(i+" -> id do usuário -> "+local.getId_usuario());
+				System.out.println("------------------------------------------------------------------------------------------------------------");
+				
+				for(int k=0;k<idDiario.size();k++)
+				{
+//					idDiarioDiferente.add(idDiario.get(k));						
+					ArrayList<Integer> IdAparicoes = aparicoes.getAparicoesMonitoramento(tabelaEscavador_usuario.get(i).getToken(), idDiario.get(k));
+					for(int l=0;l<IdAparicoes.size();l++)
+					{
+						card.add(processo.getMovimentacao(tabelaEscavador_usuario.get(i).getToken(), IdAparicoes.get(l)));
+						System.out.println("------------------------------------------------------------------------------------------------------------");
+					}					
+//					set.Escavador_id_movimentacoes(movimentacao);
+					System.out.println("------------------------------------------------------------------------------------------------------------");
+				}
+//				for(int k=0;k<card.size();k++)
+//				{
+//					boolean salvo = false;
+//					for(int l=0;l<movimentacoes.size();l++)
+//					{
+//						if(card.get(k).getIdMovimentacao() == movimentacoes.get(l).getNum_movimentacao())
+//						{
+//							salvo = true;
+//							break;
+//						}
+//					}
+//					if(salvo == false)
+//					{
+//						movimentacao.setId_usr(tabelaEscavador_usuario.get(i).getId_usuario());
+//						movimentacao.setNum_movimentacao(card.get(k).getIdMovimentacao());
+//						movimentacao.setNum_processo(card.get(k).getProcesso());
+//						set.Escavador_id_movimentacoes(movimentacao);
+//						//Enviar p trello
+//					}					
+//				}				
+				CardSaida cardTratamento = new CardSaida();
+				cardTratamento.setCard(card);
+				cardTratamento.setId_usuario(local.getId_usuario());
+				cardTotal.add(cardTratamento);								
 			}
-		} catch (Exception e) 
+			return cardTotal;
+		}
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 			System.out.println("erro");
 		}
+		return null;
+	}
+	
+	public ArrayList<CardSaida> verificarExistenciaBD(ArrayList<CardSaida> cardsEntrada)
+	{	
+		try 
+		{	
+			ArrayList<Escavador_id_movimentacoes> movimentacoes = get.Escavador_Id_Movimentacoes();
+			ArrayList<CardSaida> movimentacoesExistentes = new ArrayList<CardSaida>();
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			System.out.println("CardsEntrada Size -> "+cardsEntrada.size());
+			for(int i=0;i<cardsEntrada.size();i++)
+			{
+				int id = cardsEntrada.get(i).getId_usuario();
+				System.out.println("CardsEntrada ("+i+") Size -> "+cardsEntrada.get(i).getCard().size());
+				for(int j=0;j<cardsEntrada.get(i).getCard().size();j++)
+				{
+					for(int l=0;l<movimentacoes.size();l++)
+					{
+						if(movimentacoes.get(l).getId_usr() == id)
+						{
+							
+							System.out.println("Comparando card de entrada da mov -> "+cardsEntrada.get(i).getCard().get(j).getIdMovimentacao()+" com movimentação de número "+movimentacoes.get(l).getNum_movimentacao()+" do usuário -> "+id);
+							if(cardsEntrada.get(i).getCard().get(j).getIdMovimentacao() == movimentacoes.get(l).getNum_movimentacao())
+							{
+								CardTrelloEscavador repetido = new CardTrelloEscavador("");
+								repetido = cardsEntrada.get(i).getCard().get(j);
+								ArrayList<CardTrelloEscavador> aux = new ArrayList<>();
+								aux.add(repetido);
+								CardSaida cardAux = new CardSaida();
+								cardAux.setCard(aux);
+								cardAux.setId_usuario(id);
+								movimentacoesExistentes.add(cardAux);
+							}
+						}
+					}
+				}
+			}			
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			System.out.println("Total de movimentações já existentes -> "+movimentacoesExistentes.size());
+			for(int i=0;i<movimentacoesExistentes.size();i++)
+			{
+				System.out.println("Id do usuario -> "+movimentacoesExistentes.get(i).getId_usuario()+" / id da movimentação -> "+movimentacoesExistentes.get(i).getCard().get(0).getIdMovimentacao());
+			}
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			return movimentacoesExistentes;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public ArrayList<CardSaida> retirarDuplicados(ArrayList<CardSaida> cardTotal, ArrayList<CardSaida> cardExistente)
+	{
+		for(int i=0;i<cardTotal.size();i++)
+		{
+			for(int j=0;j<cardExistente.size();j++)
+			{
+				if(cardTotal.get(i).getId_usuario() == cardExistente.get(j).getId_usuario())
+				{
+					for(int l=0;l<cardTotal.get(i).getCard().size();l++)
+					{
+						if(cardTotal.get(i).getCard().get(l).getIdMovimentacao() == cardExistente.get(j).getCard().get(0).getIdMovimentacao())
+						{
+							cardTotal.get(i).getCard().remove(l);
+						}
+					}					
+				}
+			}
+		}
+		
+		for(int i=0;i<cardTotal.size();i++)
+		{
+			System.out.println("Número de cards ainda não existentes no BD do id ("+i+") -> "+cardTotal.get(i).getCard().size());
+		}
+		return cardTotal;
+	}
+	
+	public void adicionarMovimentacaoBD(ArrayList<CardSaida> cardsNovos)
+	{
+		for(int i=0;i<cardsNovos.size();i++)
+		{
+			for(int j=0;j<cardsNovos.get(i).getCard().size();j++)
+			{
+				Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();
+				movimentacao.setId_usr(cardsNovos.get(i).getId_usuario());
+				movimentacao.setNum_movimentacao(cardsNovos.get(i).getCard().get(j).getIdMovimentacao());
+				movimentacao.setNum_processo(cardsNovos.get(i).getCard().get(j).getProcesso());
+				System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
+				try {
+					set.Escavador_id_movimentacoes(movimentacao);
+				} catch (Exception e) {					
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static void main (String [] args)
+	{
+		ChamarEscavador teste = new ChamarEscavador();
+		ArrayList<CardSaida> cards = teste.receberAtualizacoes();
+		System.out.println("------------------------------------------------------------------------------------------------------------");
+		System.out.println("Usuários totais com movimentações -> "+cards.size());
+		System.out.println("------------------------------------------------------------------------------------------------------------");
+		ArrayList<CardSaida> cardExistentes = teste.verificarExistenciaBD(cards);
+		ArrayList<CardSaida> cardsNovos = teste.retirarDuplicados(cards, cardExistentes);
+		teste.adicionarMovimentacaoBD(cardsNovos);
 	}
 //	public ArrayList<Escavador_usuario> recuperarTokens()
 //	{

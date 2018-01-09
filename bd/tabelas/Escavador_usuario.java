@@ -5,7 +5,14 @@ public class Escavador_usuario {
 	private String token;
 	private String email;
 	private String senha;
+	private boolean antigasMovimentacoes;
 	
+	public boolean isAntigasMovimentacoes() {
+		return antigasMovimentacoes;
+	}
+	public void setAntigasMovimentacoes(boolean antigasMovimentacoes) {
+		this.antigasMovimentacoes = antigasMovimentacoes;
+	}
 	public int getId_usuario() {
 		return id_usuario;
 	}

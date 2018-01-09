@@ -62,6 +62,12 @@ public class Get {
             linha.setToken(resultado.getString("token"));
             linha.setEmail(resultado.getString("email"));
             linha.setSenha(resultado.getString("senha"));
+            if (resultado.getInt("antigas_movimentacoes")==0){
+            	 linha.setAntigasMovimentacoes(false);
+            }else{
+            	linha.setAntigasMovimentacoes(true);
+            }
+           
             lista.add(linha);
 		}
 		resultado.close();        
@@ -69,4 +75,6 @@ public class Get {
         conn.close();        
         return lista;
 	}
+	
+	
 }

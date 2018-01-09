@@ -10,9 +10,16 @@ public class CardTrelloEscavador {
 	private String parteZero;
 	private String descricao;
 	private String processo;
+	private String json;
 	private int idMovimentacao;
 	
 	
+	public String getJson() {
+		return json;
+	}
+	public void setJson(String json) {
+		this.json = json;
+	}
 	public String getProcesso() {
 		return processo;
 	}

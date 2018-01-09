@@ -25,7 +25,7 @@ import tabelas.Escavador_id_movimentacoes;
 // id = id é uma
 public class MovimentacaoProcesso {
 	
-	private CardTrelloEscavador titulo = new CardTrelloEscavador("");
+	
 	
 	public CardTrelloEscavador getMovimentacao(String token, int id) throws Exception{
 		   String link = "https://www.escavador.com/api/v1/movimentacoes/"+id;
@@ -47,35 +47,16 @@ public class MovimentacaoProcesso {
 				 int idMovimentacao = (int) jo.get("id");
  				 String processo = (String)jo.get("descricao_pequena");
  				 processo = processo.replace("Movimentação do processo","").trim();
-				 /*
-				 Set set = new Set();
-				 
-				
-				 if(verificandoIdMovimentacao(idMovimentacao)){
-					 // não insere no banco de dados
-				 }else if(!(verificandoIdMovimentacao(idMovimentacao))){
-					 // insere no banco de dados
-					 // Vai ter erro de conexão com o usuário
-					 Escavador_id_movimentacoes aux = new Escavador_id_movimentacoes();
-				//	 aux.setId_usr(id_usr);
-					 aux.setNum_processo(""+idMovimentacao);
-					 set.setEscavador_id_movimentacoes(aux);
-				 }
-				 */
-				// System.out.println(string_JSON);
-						 
-				// ArrayList idMovimentacoes = new ArrayList();
-				 
-				// Escavador_id_movimentacoes movimentacoes = new Escavador_id_movimentacoes();
-				 
-				 
+	
+ 				 
 				 	ArrayList<CardTrelloEscavador>postCard = new ArrayList<CardTrelloEscavador>();
 				 	
 				 	CardTrelloEscavador aux = new CardTrelloEscavador("");
+				 	aux.setJson(string_JSON);
 				 	aux.setTitulo(tituloCardTrello(string_JSON));
 				 	aux.setDescricao(descricaoCardTrello(string_JSON));
 				 	aux.setIdMovimentacao(idMovimentacao);
-				 	aux.setProcesso(processo);
+				 	aux.setProcesso(processo);                      
 				 	
 				 	
 				 	return aux;
@@ -84,6 +65,9 @@ public class MovimentacaoProcesso {
 	}			
 	
 	public String descricaoCardTrello(String stringJson){
+		
+		 
+		
 		 EscavadorJSON json = new EscavadorJSON();
 		 Processo processo = json.tratarJSON(stringJson);
 		 
@@ -96,6 +80,8 @@ public class MovimentacaoProcesso {
 				 .replace("<p style=text-indent:14pt;><span style=font-family:Arial, sans-serif;color:#231F20; class=content-small>", "")
 				 .replace("<p style=text-indent:28pt;><span style=font-family:Verdana, sans-serif; class=content-medium>", "")
 				 .replace("<span style=font-family:Verdana, sans-serif; class=content-medium>","")
+				 .replace("<p style=text-indent:25pt;>","")
+				 .replace("<span style=font-family:Times New Roman, serif; class=content-x-small>","")
 				 .trim();
 		 
 		 String texto_categoria = processo.getTexto_categoria().replace("<p>", "")
@@ -107,19 +93,41 @@ public class MovimentacaoProcesso {
 				 .replace("<p style=text-indent:14pt;><span style=font-family:Arial, sans-serif;color:#231F20; class=content-small>", "")
 				 .replace("<span style=font-family:Verdana, sans-serif;font-weight:bold; class=content-x-small>","")
 				 .replace("<span class=content-bold >","")
+				 .replace("<p style=text-indent:14pt;>", "")
+				 .replace("<p style=text-indent:25pt;>","")
+				 .replace("<span style=font-family:Times New Roman, serif; class=content-x-small>","")
 				 .trim();
+		 
+		 ArrayList<Envolvidos> envolvidos = processo.getEnvolvido();
+		 
+		 String advogados = "";
+		 
+		 for(int i=0;i<= envolvidos.size();i++){
+			 try{
+			 Envolvidos aux = (Envolvidos)envolvidos.get(i);
+			
+			 	if(((aux.getPivot_tipo().equals("ADVOGADO")) || (aux.getPivot_tipo().equals("ADVOGADA")) || (aux.getPivot_tipo().equals("REPRESENTANTE")) )){
+					advogados = advogados + aux.getNome() + "/";
+			 		
+				}
+			}catch(IndexOutOfBoundsException z){
+				continue;
+				
+			}
+		 }
 		 
 		 
 		 String x = processo.getDescricao_pequena()
 				 +"\n"+ processo.getDiario_oficial()
 				 + "\n" + processo.getTipo()
-				 + "\n" + processo.getSecao()
+				 + "\n" + processo.getSecao()  
+				 + "\n" + "Advogados: "+ advogados
 				 + "\n" + texto_categoria
 				 + "\n" + conteudo;
 		 
 		 
 		 System.out.println(x + "\n");
-		 titulo.setDescricao(x);
+		// titulo.setDescricao(x);
 		 return x;
 		 // informações
 		 /*
@@ -132,6 +140,9 @@ public class MovimentacaoProcesso {
 	}
 	
 	public String tituloCardTrello(String stringJson) {
+		
+		 CardTrelloEscavador titulo = new CardTrelloEscavador("");
+		
 		 EscavadorJSON json = new EscavadorJSON();
 		 Processo processo = json.tratarJSON(stringJson);
 		
@@ -161,10 +172,7 @@ public class MovimentacaoProcesso {
 			 			if(aux.getPivot_tipo().equals("APELANTE")){
 				 			titulo.setParteProcesso(titulo.getParteProcesso() +aux.getNome() + " / ");
 						 	titulo.setParteUm("Apelante");
-				 		}
-			 		
-			 		
-			 			else
+				 		}else
 			 		
 			 				if(aux.getPivot_tipo().contains("AGRAVAD") ){
 			 					titulo.setParteProcessada(titulo.getParteProcessada()+aux.getNome() +  " / ");
@@ -178,14 +186,27 @@ public class MovimentacaoProcesso {
 			 						if(aux.getPivot_tipo().contains("APELAD")){
 			 							titulo.setParteProcessada(titulo.getParteProcessada()+aux.getNome() +  " / ");
 				 						titulo.setParteDois("Apelado");	
-			 						}
-			 							else
-			 								if(!((aux.getPivot_tipo().equals("ADVOGADO")) || (aux.getPivot_tipo().equals("ADVOGADA")) || (aux.getPivot_tipo().equals("REPRESENTANTE")) || (aux.getPivot_tipo().contains("JUIZ")) )){
-			 									titulo.setParteNaoIdentificada(titulo.getParteNaoIdentificada()+aux.getNome() + " / ");
-			 									titulo.setParteZero("Partes: ");
-			 									titulo.setParteDois("");
-			 									titulo.setParteUm("");
-			 								}
+			 						}else
+			 							if(aux.getPivot_tipo().equals("REQUERENTE")){
+			 								titulo.setParteProcesso(titulo.getParteProcesso() +aux.getNome() + " / ");
+			 							 	titulo.setParteUm("Requerente");	
+					 					}else
+					 						if(aux.getPivot_tipo().contains("APELAD")){
+					 							titulo.setParteProcessada(titulo.getParteProcessada()+aux.getNome() +  " / ");
+						 						titulo.setParteDois("Apelado");	
+					 						}else
+					 							if(aux.getPivot_tipo().contains("REQUERID")){
+						 							titulo.setParteProcessada(titulo.getParteProcessada()+aux.getNome() +  " / ");
+							 						titulo.setParteDois("Requerido");	
+					 							}else
+					 									if(!((aux.getPivot_tipo().equals("ADVOGADO")) || (aux.getPivot_tipo().equals("ADVOGADA")) || (aux.getPivot_tipo().equals("REPRESENTANTE"))
+					 											|| (aux.getPivot_tipo().contains("JUIZ")) || (aux.getPivot_tipo().contains("MINISTRO IMPEDIDO")) 
+					 											|| (aux.getPivot_tipo().contains("RELATORA"))  )){
+					 										titulo.setParteNaoIdentificada(titulo.getParteNaoIdentificada()+aux.getNome() + " / ");
+					 										titulo.setParteZero("Partes: ");
+					 										titulo.setParteDois("");
+					 										titulo.setParteUm("");
+					 									}
 			 	
 		 	}catch(IndexOutOfBoundsException z){
 				continue;
@@ -207,6 +228,7 @@ public class MovimentacaoProcesso {
 	
 	}
 	
+	
 	public String dataCardTrello(String stringJson){
 
 		String data = "";
@@ -218,29 +240,12 @@ public class MovimentacaoProcesso {
 	}
 	
 	
-	
-	public boolean verificandoIdMovimentacao(int id ) throws Exception{
-
-		 String idString = ""+id;
-		 boolean aux = false;
-		 Get get = new Get();				 
-		 ArrayList <Escavador_id_movimentacoes>arrayListObjetoIdMovimentacoes =  get.Escavador_Id_Movimentacoes();
+	/*
+	public boolean enviarDadosPassados() {
+		Get get = new Get();
+		get.Escavador_token();
 		
+		return false;
 		
-		 for(int i=0;i<arrayListObjetoIdMovimentacoes.size();i++)
-		 {
-			 Escavador_id_movimentacoes escavadorMovimentacoes = (Escavador_id_movimentacoes) arrayListObjetoIdMovimentacoes.get(i);
-			 // ele não trata o erro de um ID de movimentação, estiver em mais de um usuário , mais para frente se preocupar com isso
-			 
-			 if (escavadorMovimentacoes.getNum_processo().equals(idString)){
-				 aux =  true;
-			 }else{
-				 aux = false;
-			 }			 
-		 }
-		return aux;
-	}
-	
-	
-
+	}*/
 }

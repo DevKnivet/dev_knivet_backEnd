@@ -46,7 +46,12 @@ public class ChamarEscavador {
 					ArrayList<Integer> IdAparicoes = aparicoes.getAparicoesMonitoramento(tabelaEscavador_usuario.get(i).getToken(), idDiario.get(k));
 					for(int l=0;l<IdAparicoes.size();l++)
 					{
+						ChamarTrello chamarTrello = new ChamarTrello();
+		
 						card.add(processo.getMovimentacao(tabelaEscavador_usuario.get(i).getToken(), IdAparicoes.get(l)));
+					//	CardTrelloEscavador dados = processo.getMovimentacao(tabelaEscavador_usuario.get(i).getToken(), IdAparicoes.get(l));
+					//	chamarTrello.postTrello(dados.getTitulo(), dados.getDescricao());    LINHA QUE ENVIA DADOS PARA O TRELLO
+																		
 						System.out.println("------------------------------------------------------------------------------------------------------------");
 					}					
 //					set.Escavador_id_movimentacoes(movimentacao);

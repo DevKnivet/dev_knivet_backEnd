@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import conexao.BDConnection;
+import outputs.trello.TrelloTokenKey;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 import tabelas.Usuario;
@@ -62,11 +63,11 @@ public class Get {
             linha.setToken(resultado.getString("token"));
             linha.setEmail(resultado.getString("email"));
             linha.setSenha(resultado.getString("senha"));
-            if (resultado.getInt("antigas_movimentacoes")==0){
+        /*    if (resultado.getInt("antigas_movimentacoes")==0){
             	 linha.setAntigasMovimentacoes(false);
             }else{
             	linha.setAntigasMovimentacoes(true);
-            }
+            } */
            
             lista.add(linha);
 		}
@@ -74,6 +75,23 @@ public class Get {
         comando.close();        
         conn.close();        
         return lista;
+	}
+	 
+	public TrelloTokenKey getTokenKey(int id_usuario) throws Exception{
+		
+		
+		
+		Connection conn = BDConnection.abrir();
+		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, KeyT, token FROM trello_usuario WHERE id_usuario = "+id_usuario);
+		ResultSet resultado = comando.executeQuery();
+		TrelloTokenKey trello = new TrelloTokenKey();
+		while (resultado.next()) {     
+			trello.setToken(resultado.getString("token"));
+			trello.setKey(resultado.getString("KeyT"));			
+		}
+		
+		return trello;
+		
 	}
 	
 	

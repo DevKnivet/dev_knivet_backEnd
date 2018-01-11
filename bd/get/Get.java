@@ -16,7 +16,7 @@ public class Get {
 	public ArrayList<Usuario> Usuario() throws Exception 
 	{		
         Connection conn = BDConnection.abrir();     
-        PreparedStatement comando = conn.prepareStatement("SELECT id, email, senha, usuario, emailRec FROM usuario ORDER BY id");        
+        PreparedStatement comando = conn.prepareStatement("SELECT id, email, senha, usuario, emailRec,automacoes_ativas,automacoes_max,num_automatizacoes_total,minutos_salvos_total,erros_total FROM usuario ORDER BY id");        
         ResultSet resultado = comando.executeQuery();
         ArrayList<Usuario> lista = new ArrayList<Usuario>();
         while (resultado.next()) {
@@ -24,8 +24,13 @@ public class Get {
             linha.setEmail(resultado.getString("email"));
             linha.setEmailRec(resultado.getString("emailRec"));
             linha.setId(resultado.getInt("id"));
-            linha.setNomeUsr(resultado.getString("usr"));
+            linha.setNomeUsr(resultado.getString("usuario"));
             linha.setSenha(resultado.getString("senha"));
+            linha.setAutomacoes_ativas(resultado.getInt("automacoes_ativas"));
+            linha.setAutomacoes_max(resultado.getInt("automacoes_max"));
+            linha.setNum_automatizacoes_total(resultado.getInt("num_automatizacoes_total"));
+            linha.setMinutos_salvos_total(resultado.getInt("minutos_salvos_total"));
+            linha.setErros_total(resultado.getInt("erros_total"));
             lista.add(linha);
         }
         resultado.close();

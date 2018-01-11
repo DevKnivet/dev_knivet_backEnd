@@ -2,7 +2,7 @@ package update;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
+import tabelas.Usuario;
 import conexao.BDConnection;
 import tabelas.Escavador_usuario;
 
@@ -20,6 +20,26 @@ public class Update {
 	 stmt.setInt(6,movimentacao.getMinutos_total());
 	 stmt.setInt(7,movimentacao.getAntigasMovimentacoes());
 	 stmt.setInt(8, movimentacao.getId_usuario());
+	 stmt.execute();  
+	 stmt.close();	
+	 conn.close();
+	}	
+	public void Usuario(Usuario movimentacao) throws Exception
+	{		  
+	 String sql = "UPDATE usuario SET email=?,senha=?,usuario=?,emailRec=?,erros_total=?,automacoes_ativas=?,automacoes_max=?,num_automatizacoes_total=?,minutos_salvos_total=?,erros_total=? WHERE id=?";
+	 Connection conn = BDConnection.abrir();
+	 PreparedStatement stmt = conn.prepareStatement(sql);	 
+	 stmt.setString(1,movimentacao.getEmail());
+	 stmt.setString(2,movimentacao.getSenha());
+	 stmt.setString(3,movimentacao.getNomeUsr());
+	 stmt.setString(4,movimentacao.getEmailRec());
+	 stmt.setInt(5,movimentacao.getErros_total());
+	 stmt.setInt(6,movimentacao.getAutomacoes_ativas());
+	 stmt.setInt(7,movimentacao.getAutomacoes_max());
+	 stmt.setInt(8,movimentacao.getNum_automatizacoes_total());
+	 stmt.setInt(9,movimentacao.getMinutos_salvos_total());
+	 stmt.setInt(10,movimentacao.getErros_total());
+	 stmt.setInt(11, movimentacao.getId());
 	 stmt.execute();  
 	 stmt.close();	
 	 conn.close();

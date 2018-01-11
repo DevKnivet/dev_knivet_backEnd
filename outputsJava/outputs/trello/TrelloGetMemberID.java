@@ -32,6 +32,7 @@ public class TrelloGetMemberID {
 			 // executa o HTTP
 			 HttpResponse response =  client.execute(request);
 			 String aux = EntityUtils.toString(response.getEntity());
+			 System.out.println("JSON ->"+aux);
 			 JSONObject jo = new JSONObject (aux);
 			  idMember = (String)jo.get("idMember");
 			 

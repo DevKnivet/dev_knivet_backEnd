@@ -19,7 +19,8 @@ public class Set {
 	 stmt.setString(2, user.getEmail());
 	 stmt.setString(3, user.getSenha());
 	 stmt.setString(4, user.getNomeUsr());
-	 stmt.setString(5, user.getEmailRec());  
+	 stmt.setString(5, user.getEmailRec());
+	 
 	 stmt.execute();  
 	 stmt.close();
 	 conn.close();
@@ -52,19 +53,16 @@ public class Set {
 	 stmt.execute();  
 	 stmt.close();	
 	 conn.close();
-	}
-//	public void Escavador_usuario(Escavador_usuario movimentacao) throws Exception
-//	{		  
-//	 String sql = "INSERT INTO escavador_usuario(id_usuario,token,email,senha) VALUES(?,?,?,?)";    
-//	 Connection conn = BDConnection.abrir();
-//	 PreparedStatement stmt = conn.prepareStatement(sql);
-//	 stmt.setInt(1, movimentacao.getId_usr());
-//	 stmt.setString(2, movimentacao.getNum_processo());
-//	 stmt.setInt(3, movimentacao.getNum_movimentacao());
-//	 stmt.execute();  
-//	 stmt.close();		
-//	}
-	public static void main (String [] args)
+	}	
+	//  ON DUPLICATE KEY UPDATE num_processo=?,num_movimentacao=?
+	
+	public static void main (String [] args) throws Exception
 	{
+		Set set = new Set();
+		Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();
+		movimentacao.setId_usr(1);
+		movimentacao.setNum_movimentacao(1);
+		movimentacao.setNum_processo("2");
+		set.Escavador_id_movimentacoes(movimentacao);
 	}
 }

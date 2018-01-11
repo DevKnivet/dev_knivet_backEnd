@@ -7,6 +7,7 @@ import get.Get;
 import set.Set;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
+import tabelas.Usuario;
 import update.Update;
 
 
@@ -175,6 +176,7 @@ public class ChamarEscavador {
 	{
 		try 
 		{
+			ArrayList<Usuario> usuario = get.Usuario();
 			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token();
 			int antigas_movimentacoes = 1;
 			int id_na_tabela = 0;
@@ -182,10 +184,11 @@ public class ChamarEscavador {
 			{
 				for(int k=0;k<tabelaEscavador_usuario.size();k++)
 				{
+					System.out.println("Id na tabela escavador ("+tabelaEscavador_usuario.get(k).getId_usuario()+") -> Id do card a ser salvo ("+cardsNovos.get(i).getId_usuario()+")");
 					if(tabelaEscavador_usuario.get(k).getId_usuario() == cardsNovos.get(i).getId_usuario())
 					{
 						antigas_movimentacoes = tabelaEscavador_usuario.get(k).getAntigasMovimentacoes();
-						id_na_tabela = k;
+						id_na_tabela = tabelaEscavador_usuario.get(k).getId_usuario();
 					}
 				}
 				
@@ -198,10 +201,37 @@ public class ChamarEscavador {
 					System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
 					if(antigas_movimentacoes == 1)
 					{					
+						System.out.println("Usuario vai adicionar Card");
 						try {
-							ChamarTrello chamarTrello = new ChamarTrello();
-							set.Escavador_id_movimentacoes(movimentacao);
-							chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
+							
+							for(int k=0;k<usuario.size();k++)
+							{
+								System.out.println("Ids na Tabela ("+usuario.get(k).getId()+") -> local ("+id_na_tabela+")");
+								if(usuario.get(k).getId() == id_na_tabela)
+								{
+									System.out.println("Usuário reuperado");
+									for(int l=0;l<tabelaEscavador_usuario.size();l++)
+									{	
+										if(tabelaEscavador_usuario.get(l).getId_usuario() == id_na_tabela)
+										{
+											System.out.println("Usuario Escavador Recuperado");
+											System.out.println("Enviando ao Trello o novo Card");
+											Escavador_usuario esc_usuario = tabelaEscavador_usuario.get(l);
+											esc_usuario.setChamadas_total(esc_usuario.getChamadas_total() + 1);
+											esc_usuario.setMinutos_total(esc_usuario.getMinutos_total() + 10);
+											update.Escavador_usuario(esc_usuario);
+											ChamarTrello chamarTrello = new ChamarTrello();
+											set.Escavador_id_movimentacoes(movimentacao);
+											usuario.get(k).setMinutos_salvos_total(usuario.get(k).getMinutos_salvos_total() + 10);
+											usuario.get(k).setNum_automatizacoes_total(usuario.get(k).getNum_automatizacoes_total() + 1);
+											update.Usuario(usuario.get(k));
+											chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
+										}
+									}
+								}
+							}
+							
+							
 						} catch (Exception e) {					
 							e.printStackTrace();
 						}

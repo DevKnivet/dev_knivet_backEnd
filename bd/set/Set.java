@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 
 import conexao.BDConnection;
 import tabelas.Escavador_id_movimentacoes;
+import tabelas.Escavador_usuario;
 import tabelas.Usuario;
 
 public class Set {
@@ -20,7 +21,8 @@ public class Set {
 	 stmt.setString(4, user.getNomeUsr());
 	 stmt.setString(5, user.getEmailRec());  
 	 stmt.execute();  
-	 stmt.close();		
+	 stmt.close();
+	 conn.close();
 	}
 	public void Escavador_id_movimentacoes(Escavador_id_movimentacoes movimentacao) throws Exception
 	{		  
@@ -32,6 +34,24 @@ public class Set {
 	 stmt.setInt(3, movimentacao.getNum_movimentacao());
 	 stmt.execute();  
 	 stmt.close();		
+	 conn.close();
+	}
+	public void Escavador_usuario(Escavador_usuario movimentacao) throws Exception
+	{		  
+	 String sql = "INSERT INTO escavador_usuario(id_usuario,token,email,senha,chamadas_total,erros_total,minutos_salvos,antigas_movimentacoes) VALUES(?,?,?,?,?,?,?,?)";	 
+	 Connection conn = BDConnection.abrir();
+	 PreparedStatement stmt = conn.prepareStatement(sql);
+	 stmt.setInt(1, movimentacao.getId_usuario());
+	 stmt.setString(2,movimentacao.getToken());
+	 stmt.setString(3,movimentacao.getEmail());
+	 stmt.setString(4,movimentacao.getSenha());
+	 stmt.setInt(5,movimentacao.getChamadas_total());
+	 stmt.setInt(6,movimentacao.getErros_total());
+	 stmt.setInt(7,movimentacao.getMinutos_total());
+	 stmt.setInt(8,movimentacao.getAntigasMovimentacoes());
+	 stmt.execute();  
+	 stmt.close();	
+	 conn.close();
 	}
 //	public void Escavador_usuario(Escavador_usuario movimentacao) throws Exception
 //	{		  

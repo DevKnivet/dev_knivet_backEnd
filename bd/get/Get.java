@@ -54,7 +54,7 @@ public class Get {
 	public ArrayList<Escavador_usuario> Escavador_token() throws Exception
 	{
 		Connection conn = BDConnection.abrir();
-		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, token, email, senha FROM escavador_usuario ORDER BY id_usuario");
+		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, token, email, senha, chamadas_total, erros_total, minutos_salvos ,antigas_movimentacoes FROM escavador_usuario ORDER BY id_usuario");
 		ResultSet resultado = comando.executeQuery();
 		ArrayList<Escavador_usuario> lista = new ArrayList<Escavador_usuario>();
 		while (resultado.next()) {        	
@@ -63,12 +63,10 @@ public class Get {
             linha.setToken(resultado.getString("token"));
             linha.setEmail(resultado.getString("email"));
             linha.setSenha(resultado.getString("senha"));
-        /*    if (resultado.getInt("antigas_movimentacoes")==0){
-            	 linha.setAntigasMovimentacoes(false);
-            }else{
-            	linha.setAntigasMovimentacoes(true);
-            } */
-           
+            linha.setChamadas_total(resultado.getInt("chamadas_total"));
+            linha.setErros_total(resultado.getInt("erros_total"));
+            linha.setMinutos_total(resultado.getInt("minutos_salvos"));
+            linha.setAntigasMovimentacoes(resultado.getInt("antigas_movimentacoes"));
             lista.add(linha);
 		}
 		resultado.close();        
@@ -89,7 +87,9 @@ public class Get {
 			trello.setToken(resultado.getString("token"));
 			trello.setKey(resultado.getString("KeyT"));			
 		}
-		
+		resultado.close();        
+        comando.close();        
+        conn.close();
 		return trello;
 		
 	}

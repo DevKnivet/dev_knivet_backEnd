@@ -7,10 +7,12 @@ import get.Get;
 import set.Set;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
+import update.Update;
 
 public class ChamarEscavador {
 	Get get = new Get();
 	Set set = new Set();
+	Update update = new Update();
 	ArrayList<CardSaida> cardTotal = new ArrayList<CardSaida>();
 	public ArrayList<CardSaida> receberAtualizacoes()
 	{
@@ -46,11 +48,9 @@ public class ChamarEscavador {
 					ArrayList<Integer> IdAparicoes = aparicoes.getAparicoesMonitoramento(tabelaEscavador_usuario.get(i).getToken(), idDiario.get(k));
 					for(int l=0;l<IdAparicoes.size();l++)
 					{
-						ChamarTrello chamarTrello = new ChamarTrello();
-		
+						
 						card.add(processo.getMovimentacao(tabelaEscavador_usuario.get(i).getToken(), IdAparicoes.get(l)));
-					//	CardTrelloEscavador dados = processo.getMovimentacao(tabelaEscavador_usuario.get(i).getToken(), IdAparicoes.get(l));
-					//	chamarTrello.postTrello(dados.getTitulo(), dados.getDescricao());    LINHA QUE ENVIA DADOS PARA O TRELLO
+						
 																		
 						System.out.println("------------------------------------------------------------------------------------------------------------");
 					}					
@@ -172,23 +172,80 @@ public class ChamarEscavador {
 	
 	public void adicionarMovimentacaoBD(ArrayList<CardSaida> cardsNovos)
 	{
-		for(int i=0;i<cardsNovos.size();i++)
+		try 
 		{
-			for(int j=0;j<cardsNovos.get(i).getCard().size();j++)
+			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token();
+			int antigas_movimentacoes = 1;
+			int id_na_tabela = 0;
+			for(int i=0;i<cardsNovos.size();i++)
 			{
-				Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();
-				movimentacao.setId_usr(cardsNovos.get(i).getId_usuario());
-				movimentacao.setNum_movimentacao(cardsNovos.get(i).getCard().get(j).getIdMovimentacao());
-				movimentacao.setNum_processo(cardsNovos.get(i).getCard().get(j).getProcesso());
-				System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
-				try {
-					set.Escavador_id_movimentacoes(movimentacao);
-				} catch (Exception e) {					
-					e.printStackTrace();
+				for(int k=0;k<tabelaEscavador_usuario.size();k++)
+				{
+					if(tabelaEscavador_usuario.get(k).getId_usuario() == cardsNovos.get(i).getId_usuario())
+					{
+						antigas_movimentacoes = tabelaEscavador_usuario.get(k).getAntigasMovimentacoes();
+						id_na_tabela = k;
+					}
+				}
+				
+				for(int j=0;j<cardsNovos.get(i).getCard().size();j++)
+				{
+					Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();
+					movimentacao.setId_usr(cardsNovos.get(i).getId_usuario());
+					movimentacao.setNum_movimentacao(cardsNovos.get(i).getCard().get(j).getIdMovimentacao());
+					movimentacao.setNum_processo(cardsNovos.get(i).getCard().get(j).getProcesso());
+					System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
+					if(antigas_movimentacoes == 1)
+					{					
+						try {
+							ChamarTrello chamarTrello = new ChamarTrello();
+							set.Escavador_id_movimentacoes(movimentacao);
+							chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
+						} catch (Exception e) {					
+							e.printStackTrace();
+						}
+					}
+					if(antigas_movimentacoes == 0)
+					{					
+						try {							
+							set.Escavador_id_movimentacoes(movimentacao);
+//							tabelaEscavador_usuario.get(id_na_tabela).setAntigasMovimentacoes(antigasMovimentacoes);
+							Escavador_usuario usuarioUpdate = tabelaEscavador_usuario.get(id_na_tabela);
+							usuarioUpdate.setAntigasMovimentacoes(1);
+							update.Escavador_usuario(usuarioUpdate);
+							
+						} catch (Exception e) {					
+							e.printStackTrace();
+						}
+					}
+					
 				}
 			}
-		}
+		} catch (Exception e1) 
+		{
+			e1.printStackTrace();
+		}		
 	}
+	
+//	public void adicionarMovimentacaoPrimeiraVez(ArrayList<CardSaida> cardsNovos)
+//	{
+//		for(int i=0;i<cardsNovos.size();i++)
+//		{
+//			for(int j=0;j<cardsNovos.get(i).getCard().size();j++)
+//			{
+//				Escavador_id_movimentacoes movimentacao = new Escavador_id_movimentacoes();
+//				movimentacao.setId_usr(cardsNovos.get(i).getId_usuario());
+//				movimentacao.setNum_movimentacao(cardsNovos.get(i).getCard().get(j).getIdMovimentacao());
+//				movimentacao.setNum_processo(cardsNovos.get(i).getCard().get(j).getProcesso());
+//				System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
+//				try {
+//					set.Escavador_id_movimentacoes(movimentacao);					
+//				} catch (Exception e) {					
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 	
 	public static void main (String [] args)
 	{

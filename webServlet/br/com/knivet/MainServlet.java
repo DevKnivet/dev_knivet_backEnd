@@ -14,6 +14,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+
+import escavadorProcesso.ChamarEscavador;
+
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
@@ -28,22 +31,26 @@ public class MainServlet extends HttpServlet{
 	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
-		StringBuilder json = new StringBuilder();
-		BufferedReader reader = req.getReader();
-		String linha;
-		while( (linha = reader.readLine()) != null ){
-		    json.append(linha);
-		}
-		System.out.println("lendo json"+json.toString());
+//		StringBuilder json = new StringBuilder();
+//		BufferedReader reader = req.getReader();
+//		String linha;
+//		while( (linha = reader.readLine()) != null ){
+//		    json.append(linha);
+//		}
+//		System.out.println("lendo json"+json.toString());
+		ChamarEscavador escavador = new ChamarEscavador();
+		escavador.run();
     }
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
 	{	
-		StringBuilder json = new StringBuilder();
-		BufferedReader reader = req.getReader();
-		String linha;
-		while( (linha = reader.readLine()) != null ){
-		    json.append(linha);
-		}
-		System.out.println("lendo json"+json.toString());
+//		StringBuilder json = new StringBuilder();
+//		BufferedReader reader = req.getReader();
+//		String linha;
+//		while( (linha = reader.readLine()) != null ){
+//		    json.append(linha);
+//		}
+//		System.out.println("lendo json"+json.toString());
+		ChamarEscavador escavador = new ChamarEscavador();
+		escavador.run();
 	}
 }

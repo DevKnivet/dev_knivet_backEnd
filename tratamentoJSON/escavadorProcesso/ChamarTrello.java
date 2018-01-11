@@ -15,8 +15,8 @@ public class ChamarTrello {
 	public void postTrello(String nomeCard, String descCard, int idUsuario) throws Exception{
 		
 		Get get = new Get();
-		TrelloTokenKey tokenKey = get.getTokenKey(18);
-//		TrelloTokenKey tokenKey = get.getTokenKey(idUsuario);
+//		TrelloTokenKey tokenKey = get.getTokenKey(18);
+		TrelloTokenKey tokenKey = get.getTokenKey(idUsuario);
 		TrelloGetMemberID getMember = new TrelloGetMemberID();
 		String memberId = getMember.getMemberId(tokenKey.getToken(), tokenKey.getKey());
 		TrelloPostExistingBoard boardExistente = new TrelloPostExistingBoard();

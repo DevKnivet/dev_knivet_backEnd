@@ -9,6 +9,7 @@ import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 import update.Update;
 
+
 public class ChamarEscavador {
 	Get get = new Get();
 	Set set = new Set();
@@ -246,6 +247,18 @@ public class ChamarEscavador {
 //			}
 //		}
 //	}
+	
+	public void run ()
+	{
+		ChamarEscavador teste = new ChamarEscavador();
+		ArrayList<CardSaida> cards = teste.receberAtualizacoes();
+		System.out.println("------------------------------------------------------------------------------------------------------------");
+		System.out.println("Usuários totais com movimentações -> "+cards.size());
+		System.out.println("------------------------------------------------------------------------------------------------------------");
+		ArrayList<CardSaida> cardExistentes = teste.verificarExistenciaBD(cards);
+		ArrayList<CardSaida> cardsNovos = teste.retirarDuplicados(cards, cardExistentes);
+		teste.adicionarMovimentacaoBD(cardsNovos);
+	}
 	
 	public static void main (String [] args)
 	{

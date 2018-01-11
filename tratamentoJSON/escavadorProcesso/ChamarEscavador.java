@@ -174,6 +174,7 @@ public class ChamarEscavador {
 	
 	public void adicionarMovimentacaoBD(ArrayList<CardSaida> cardsNovos)
 	{
+		System.out.println("Adicionando movimentações ao BD");
 		try 
 		{
 			ArrayList<Usuario> usuario = get.Usuario();
@@ -184,9 +185,10 @@ public class ChamarEscavador {
 			{
 				for(int k=0;k<tabelaEscavador_usuario.size();k++)
 				{
-					System.out.println("Id na tabela escavador ("+tabelaEscavador_usuario.get(k).getId_usuario()+") -> Id do card a ser salvo ("+cardsNovos.get(i).getId_usuario()+")");
+					
 					if(tabelaEscavador_usuario.get(k).getId_usuario() == cardsNovos.get(i).getId_usuario())
 					{
+						System.out.println("Id na tabela escavador ("+tabelaEscavador_usuario.get(k).getId_usuario()+") -> Id do card a ser salvo ("+cardsNovos.get(i).getId_usuario()+")");
 						antigas_movimentacoes = tabelaEscavador_usuario.get(k).getAntigasMovimentacoes();
 						id_na_tabela = tabelaEscavador_usuario.get(k).getId_usuario();
 					}
@@ -200,7 +202,8 @@ public class ChamarEscavador {
 					movimentacao.setNum_processo(cardsNovos.get(i).getCard().get(j).getProcesso());
 					System.out.println("Adicionando ao BD nova movimentação de usuário ("+movimentacao.getId_usr()+") com o número da movimentação -> "+movimentacao.getNum_movimentacao());
 					if(antigas_movimentacoes == 1)
-					{					
+					{			
+						System.out.println("Antigas movimentações = 1");
 						System.out.println("Usuario vai adicionar Card");
 						try {
 							
@@ -209,7 +212,7 @@ public class ChamarEscavador {
 								System.out.println("Ids na Tabela ("+usuario.get(k).getId()+") -> local ("+id_na_tabela+")");
 								if(usuario.get(k).getId() == id_na_tabela)
 								{
-									System.out.println("Usuário reuperado");
+									System.out.println("Usuário reuperado ("+usuario.get(k).getId()+")");
 									for(int l=0;l<tabelaEscavador_usuario.size();l++)
 									{	
 										if(tabelaEscavador_usuario.get(l).getId_usuario() == id_na_tabela)
@@ -226,6 +229,7 @@ public class ChamarEscavador {
 											usuario.get(k).setNum_automatizacoes_total(usuario.get(k).getNum_automatizacoes_total() + 1);
 											update.Usuario(usuario.get(k));
 											chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
+											System.out.println("------------------------------------------------------------------------------------------------------------");
 										}
 									}
 								}
@@ -237,13 +241,24 @@ public class ChamarEscavador {
 						}
 					}
 					if(antigas_movimentacoes == 0)
-					{					
+					{			
+						System.out.println("Antigas movimentações = 0");
 						try {							
 							set.Escavador_id_movimentacoes(movimentacao);
 //							tabelaEscavador_usuario.get(id_na_tabela).setAntigasMovimentacoes(antigasMovimentacoes);
-							Escavador_usuario usuarioUpdate = tabelaEscavador_usuario.get(id_na_tabela);
-							usuarioUpdate.setAntigasMovimentacoes(1);
-							update.Escavador_usuario(usuarioUpdate);
+							System.out.println("Id na tabela = "+id_na_tabela);
+							for(int k=0;k<tabelaEscavador_usuario.size();k++)
+							{
+								if(tabelaEscavador_usuario.get(k).getId_usuario() == id_na_tabela)
+								{
+									System.out.println("Usuario encontrado na tabela escavador usuario");
+									Escavador_usuario usuarioUpdate = tabelaEscavador_usuario.get(k);
+									usuarioUpdate.setAntigasMovimentacoes(1);
+									update.Escavador_usuario(usuarioUpdate);
+									System.out.println("------------------------------------------------------------------------------------------------------------");
+								}
+							}
+							
 							
 						} catch (Exception e) {					
 							e.printStackTrace();
@@ -278,6 +293,26 @@ public class ChamarEscavador {
 //		}
 //	}
 	
+	public void antigas_movs()
+	{
+		try 
+		{
+			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token();
+			for(int i=0;i<tabelaEscavador_usuario.size();i++)
+			{				
+				if(tabelaEscavador_usuario.get(i).getAntigasMovimentacoes() == 0)
+				{
+					tabelaEscavador_usuario.get(i).setAntigasMovimentacoes(1);
+					update.Escavador_usuario(tabelaEscavador_usuario.get(i));
+					System.out.println("Usuário ("+tabelaEscavador_usuario.get(i).getId_usuario()+") não possui nenhuma movimentação e está como adicionar antigas movimentações. Abortando e atualizando para como adicionado");
+				}
+			}
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void run ()
 	{
 		ChamarEscavador teste = new ChamarEscavador();
@@ -288,18 +323,13 @@ public class ChamarEscavador {
 		ArrayList<CardSaida> cardExistentes = teste.verificarExistenciaBD(cards);
 		ArrayList<CardSaida> cardsNovos = teste.retirarDuplicados(cards, cardExistentes);
 		teste.adicionarMovimentacaoBD(cardsNovos);
+		teste.antigas_movs();
 	}
 	
 	public static void main (String [] args)
 	{
 		ChamarEscavador teste = new ChamarEscavador();
-		ArrayList<CardSaida> cards = teste.receberAtualizacoes();
-		System.out.println("------------------------------------------------------------------------------------------------------------");
-		System.out.println("Usuários totais com movimentações -> "+cards.size());
-		System.out.println("------------------------------------------------------------------------------------------------------------");
-		ArrayList<CardSaida> cardExistentes = teste.verificarExistenciaBD(cards);
-		ArrayList<CardSaida> cardsNovos = teste.retirarDuplicados(cards, cardExistentes);
-		teste.adicionarMovimentacaoBD(cardsNovos);
+		teste.run();
 	}
 //	public ArrayList<Escavador_usuario> recuperarTokens()
 //	{

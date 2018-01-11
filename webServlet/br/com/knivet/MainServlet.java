@@ -1,4 +1,4 @@
-package br.com.knivet;
+ package br.com.knivet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +38,8 @@ public class MainServlet extends HttpServlet{
 //		    json.append(linha);
 //		}
 //		System.out.println("lendo json"+json.toString());
+		PrintWriter out = resp.getWriter();
+		out.print("Rodando escavador");
 		ChamarEscavador escavador = new ChamarEscavador();
 		escavador.run();
     }
@@ -50,6 +52,8 @@ public class MainServlet extends HttpServlet{
 //		    json.append(linha);
 //		}
 //		System.out.println("lendo json"+json.toString());
+		PrintWriter out = res.getWriter();
+		out.print("Rodando escavador");
 		ChamarEscavador escavador = new ChamarEscavador();
 		escavador.run();
 	}

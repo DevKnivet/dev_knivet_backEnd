@@ -11,6 +11,7 @@ import outputs.trello.TrelloTokenKey;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 import tabelas.Usuario;
+import tabelas.Chamadas_feitas_temp;
 
 public class Get {
 	public ArrayList<Usuario> Usuario() throws Exception 
@@ -99,5 +100,29 @@ public class Get {
 		
 	}
 	
+	
+	public ArrayList<Chamadas_feitas_temp>  Chamadas_feitas_temp() throws Exception{
+		Connection conn = BDConnection.abrir();
+		PreparedStatement comando = conn.prepareStatement("SELECT id_usuario, vl1, vl2, vl3, vl4, vl5, vl6, vl7, alterado FROM chamadas_feitas_temp ORDER BY id_usuario");
+		ResultSet resultado = comando.executeQuery();		
+		ArrayList<Chamadas_feitas_temp> lista = new ArrayList<Chamadas_feitas_temp>();
+		while (resultado.next()) {     
+			Chamadas_feitas_temp temp = new Chamadas_feitas_temp();
+			temp.setId_usuario(resultado.getInt("id_usuario"));
+			temp.setVl1(resultado.getInt("vl1"));
+			temp.setVl2(resultado.getInt("vl2"));
+			temp.setVl3(resultado.getInt("vl3"));
+			temp.setVl4(resultado.getInt("vl4"));
+			temp.setVl5(resultado.getInt("vl5"));
+			temp.setVl6(resultado.getInt("vl6"));
+			temp.setV7(resultado.getInt("vl7"));
+			temp.setAlterado(resultado.getString("alterado"));
+			lista.add(temp);
+		}
+		resultado.close();        
+        comando.close();        
+        conn.close();
+		return lista;
+	}
 	
 }

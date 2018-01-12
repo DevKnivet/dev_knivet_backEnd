@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import tabelas.Usuario;
 import conexao.BDConnection;
+import tabelas.Chamadas_feitas_temp;
 import tabelas.Escavador_usuario;
 
 public class Update {
@@ -44,6 +45,26 @@ public class Update {
 	 stmt.close();	
 	 conn.close();
 	}
+	
+	public void Chamadas_feitas_temp(Chamadas_feitas_temp movimentacao) throws Exception
+	{		  
+	 String sql = "UPDATE chamadas_feitas_temp SET vl1=?, vl2=?, vl3=?, vl4=?, vl5=?, vl6=?, vl7=?, alterado=? WHERE id_usuario=?";	 
+	 Connection conn = BDConnection.abrir();
+	 PreparedStatement stmt = conn.prepareStatement(sql);	 
+	 stmt.setInt(1, movimentacao.getVl1());
+	 stmt.setInt(2, movimentacao.getVl2());
+	 stmt.setInt(3, movimentacao.getVl3());
+	 stmt.setInt(4, movimentacao.getVl4());
+	 stmt.setInt(5, movimentacao.getVl5());
+	 stmt.setInt(6, movimentacao.getVl6());
+	 stmt.setInt(7, movimentacao.getV7());
+	 stmt.setString(8, movimentacao.getAlterado());
+	 stmt.setInt(9, movimentacao.getId_usuario());
+	 stmt.execute();  
+	 stmt.close();	
+	 conn.close();
+	}
+	
 	public static void main (String[] args) throws Exception
 	{
 		Escavador_usuario movimentacao = new Escavador_usuario();

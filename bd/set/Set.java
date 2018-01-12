@@ -7,6 +7,7 @@ import conexao.BDConnection;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 import tabelas.Usuario;
+import tabelas.Chamadas_feitas_temp;
 
 public class Set {
 	public void Usuario(Usuario user,int id) throws Exception
@@ -30,6 +31,7 @@ public class Set {
 	 String sql = "INSERT INTO escavador_movimentacoes_id(id_usuario,num_processo,num_movimentacao) VALUES(?,?,?)";    
 	 Connection conn = BDConnection.abrir();
 	 PreparedStatement stmt = conn.prepareStatement(sql);
+	 System.out.println("Adicionando no BD movimentação (Interno) -> "+movimentacao.getId_usr()+" -> "+movimentacao.getNum_movimentacao());
 	 stmt.setInt(1, movimentacao.getId_usr());
 	 stmt.setString(2, movimentacao.getNum_processo());
 	 stmt.setInt(3, movimentacao.getNum_movimentacao());
@@ -53,7 +55,26 @@ public class Set {
 	 stmt.execute();  
 	 stmt.close();	
 	 conn.close();
-	}	
+	}
+	
+	public void Chamadas_feitas_temp(Chamadas_feitas_temp movimentacao) throws Exception
+	{		  
+	 String sql = "INSERT INTO chamadas_feitas_temp(id_usuario,vl1,vl2,vl3,vl4,vl5,vl6,vl7,alterado) VALUES(?,?,?,?,?,?,?,?,?)";	 
+	 Connection conn = BDConnection.abrir();
+	 PreparedStatement stmt = conn.prepareStatement(sql);
+	 stmt.setInt(1, movimentacao.getId_usuario());
+	 stmt.setInt(2, movimentacao.getVl1());
+	 stmt.setInt(3, movimentacao.getVl2());
+	 stmt.setInt(4, movimentacao.getVl3());
+	 stmt.setInt(5, movimentacao.getVl4());
+	 stmt.setInt(6, movimentacao.getVl5());
+	 stmt.setInt(7, movimentacao.getVl6());
+	 stmt.setInt(8, movimentacao.getV7());
+	 stmt.setString(9, movimentacao.getAlterado());
+	 stmt.execute();  
+	 stmt.close();	
+	 conn.close();
+	}
 	//  ON DUPLICATE KEY UPDATE num_processo=?,num_movimentacao=?
 	
 	public static void main (String [] args) throws Exception

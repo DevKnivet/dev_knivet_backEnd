@@ -1,10 +1,15 @@
 package escavadorProcesso;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import get.Get;
 import set.Set;
+import tabelas.Chamadas_feitas_temp;
 import tabelas.Escavador_id_movimentacoes;
 import tabelas.Escavador_usuario;
 import tabelas.Usuario;
@@ -178,7 +183,7 @@ public class ChamarEscavador {
 		try 
 		{
 			ArrayList<Usuario> usuario = get.Usuario();
-			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token();
+			ArrayList<Escavador_usuario> tabelaEscavador_usuario = get.Escavador_token();			
 			int antigas_movimentacoes = 1;
 			int id_na_tabela = 0;
 			for(int i=0;i<cardsNovos.size();i++)
@@ -218,18 +223,30 @@ public class ChamarEscavador {
 										if(tabelaEscavador_usuario.get(l).getId_usuario() == id_na_tabela)
 										{
 											System.out.println("Usuario Escavador Recuperado");
-											System.out.println("Enviando ao Trello o novo Card");
-											Escavador_usuario esc_usuario = tabelaEscavador_usuario.get(l);
-											esc_usuario.setChamadas_total(esc_usuario.getChamadas_total() + 1);
-											esc_usuario.setMinutos_total(esc_usuario.getMinutos_total() + 10);
-											update.Escavador_usuario(esc_usuario);
-											ChamarTrello chamarTrello = new ChamarTrello();
-											set.Escavador_id_movimentacoes(movimentacao);
-											usuario.get(k).setMinutos_salvos_total(usuario.get(k).getMinutos_salvos_total() + 10);
-											usuario.get(k).setNum_automatizacoes_total(usuario.get(k).getNum_automatizacoes_total() + 1);
-											update.Usuario(usuario.get(k));
-											chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
-											System.out.println("------------------------------------------------------------------------------------------------------------");
+											ArrayList<Chamadas_feitas_temp> chamadasTemp = get.Chamadas_feitas_temp();
+											for(int m=0;m<chamadasTemp.size();m++)
+											{
+												System.out.println(id_na_tabela+" -> "+chamadasTemp.get(m).getId_usuario());
+												if(id_na_tabela == chamadasTemp.get(m).getId_usuario())
+												{
+													System.out.println("Enviando ao Trello o novo Card");
+													Escavador_usuario esc_usuario = tabelaEscavador_usuario.get(l);
+													esc_usuario.setChamadas_total(esc_usuario.getChamadas_total() + 1);
+													esc_usuario.setMinutos_total(esc_usuario.getMinutos_total() + 10);
+													update.Escavador_usuario(esc_usuario);
+													ChamarTrello chamarTrello = new ChamarTrello();													
+													set.Escavador_id_movimentacoes(movimentacao);
+													usuario.get(k).setMinutos_salvos_total(usuario.get(k).getMinutos_salvos_total() + 10);
+													usuario.get(k).setNum_automatizacoes_total(usuario.get(k).getNum_automatizacoes_total() + 1);
+													update.Usuario(usuario.get(k));
+													chamarTrello.postTrello(cardsNovos.get(i).getCard().get(j).getTitulo(), cardsNovos.get(i).getCard().get(j).getDescricao(), cardsNovos.get(i).getId_usuario());
+													System.out.println("Chamadas -> "+chamadasTemp.get(m).getVl1());
+													chamadasTemp.get(m).setVl1(chamadasTemp.get(m).getVl1()+1);
+													update.Chamadas_feitas_temp(chamadasTemp.get(m));
+													System.out.println("Nova chamadas ->"+chamadasTemp.get(m).getVl1());
+													System.out.println("------------------------------------------------------------------------------------------------------------");
+												}
+											}
 										}
 									}
 								}
@@ -252,10 +269,20 @@ public class ChamarEscavador {
 								if(tabelaEscavador_usuario.get(k).getId_usuario() == id_na_tabela)
 								{
 									System.out.println("Usuario encontrado na tabela escavador usuario");
-									Escavador_usuario usuarioUpdate = tabelaEscavador_usuario.get(k);
-									usuarioUpdate.setAntigasMovimentacoes(1);
-									update.Escavador_usuario(usuarioUpdate);
-									System.out.println("------------------------------------------------------------------------------------------------------------");
+									ArrayList<Chamadas_feitas_temp> chamadasTemp = get.Chamadas_feitas_temp();
+									for(int l=0;i<chamadasTemp.size();l++)
+									{
+										if(id_na_tabela == chamadasTemp.get(l).getId_usuario())
+										{
+											System.out.println("Usuario encontrado na tabela chamdas temp");
+											Escavador_usuario usuarioUpdate = tabelaEscavador_usuario.get(k);
+											usuarioUpdate.setAntigasMovimentacoes(1);
+											update.Escavador_usuario(usuarioUpdate);
+											chamadasTemp.get(l).setVl1(chamadasTemp.get(l).getVl1()+1);
+											update.Chamadas_feitas_temp(chamadasTemp.get(l));
+											System.out.println("------------------------------------------------------------------------------------------------------------");
+										}
+									}
 								}
 							}
 							
@@ -313,9 +340,40 @@ public class ChamarEscavador {
 		}
 	}
 	
+	public void estatistica()
+	{
+		LocalDate date = LocalDate.now();
+		DayOfWeek dow = date.getDayOfWeek();
+		Locale brasil = new Locale("pt", "BR");
+		String dayName = dow.getDisplayName(TextStyle.FULL, brasil);
+		dayName = dayName.toLowerCase();
+		System.out.println(dayName);
+		try {
+			ArrayList<Chamadas_feitas_temp> chamadas = get.Chamadas_feitas_temp();
+			for(int i=0;i<chamadas.size();i++)
+			{
+				if(chamadas.get(i).getAlterado() != dayName)
+				{					
+					chamadas.get(i).setV7(chamadas.get(i).getVl6());
+					chamadas.get(i).setVl6(chamadas.get(i).getVl5());
+					chamadas.get(i).setVl5(chamadas.get(i).getVl4());
+					chamadas.get(i).setVl4(chamadas.get(i).getVl3());
+					chamadas.get(i).setVl3(chamadas.get(i).getVl2());
+					chamadas.get(i).setVl2(chamadas.get(i).getVl1());
+					chamadas.get(i).setVl1(0);
+					chamadas.get(i).setAlterado(dayName);
+					update.Chamadas_feitas_temp(chamadas.get(i));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void run ()
 	{
 		ChamarEscavador teste = new ChamarEscavador();
+		teste.estatistica();
 		ArrayList<CardSaida> cards = teste.receberAtualizacoes();
 		System.out.println("------------------------------------------------------------------------------------------------------------");
 		System.out.println("Usuários totais com movimentações -> "+cards.size());
@@ -330,6 +388,7 @@ public class ChamarEscavador {
 	{
 		ChamarEscavador teste = new ChamarEscavador();
 		teste.run();
+//		teste.estatistica();
 	}
 //	public ArrayList<Escavador_usuario> recuperarTokens()
 //	{

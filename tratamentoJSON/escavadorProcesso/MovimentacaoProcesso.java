@@ -123,7 +123,7 @@ public class MovimentacaoProcesso {
 				 + "\n" + processo.getSecao()  
 				 + "\n" + "Advogados: "+ advogados
 				 + "\n" + texto_categoria
-				 + "\n" + conteudo;
+				 + "\n \n" + conteudo;
 		 
 		 
 		 System.out.println(x + "\n");
